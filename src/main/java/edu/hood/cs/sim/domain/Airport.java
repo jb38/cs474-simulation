@@ -1,6 +1,9 @@
 package edu.hood.cs.sim.domain;
 
-public class Airport {
+import sim.engine.SimState;
+import sim.engine.Steppable;
+
+public class Airport implements Steppable {
 
 	public static final String FIELD_ICAO = "icao";
 	public static final String FIELD_NAME = "name";
@@ -44,5 +47,10 @@ public class Airport {
 	
 	public void setLatitude(double latitude) {
 		this.latitude = latitude;
+	}
+
+	public void step(SimState arg0) {
+		// TODO Auto-generated method stub
+		
 	}
 }

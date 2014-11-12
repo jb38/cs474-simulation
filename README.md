@@ -58,3 +58,13 @@ http://maven.apache.org/download.cgi
     * Commit
     * Right-click on the `cs474-simulation` project
     * Team > Commit to Upstream
+
+### Compile and Execute
+
+  1. To build (to a jar):
+
+        mvn clean package
+
+  1. To execute (NOTE: you should have flights.db saved from Google Drive to your current directory):
+
+        java -jar ./target/cs474-simulation-0.0.1-SNAPSHOT.jar

@@ -1,4 +1,10 @@
+.classpath
+.project
+.settings/
 target/
+*.db
+*.sqlite3
+*.csv
 pom.xml.tag
 pom.xml.releaseBackup
 pom.xml.versionsBackup

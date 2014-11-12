@@ -12,6 +12,20 @@ public class AircraftRepositoryTest extends TestCase {
 		super(testName);
 	}
 	
+	public void testFetch1() {
+		
+		AircraftRepository repository = AircraftRepository.getInstance();
+		
+		assertNull(repository.fetch("LOLNOPE"));
+	}
+	
+	public void testFetch2() {
+		
+		AircraftRepository repository = AircraftRepository.getInstance();
+		
+		assertNotNull(repository.fetch("D942DN"));
+	}
+	
 	public void testFetchAll() {
 		
 		AircraftRepository repository = AircraftRepository.getInstance();

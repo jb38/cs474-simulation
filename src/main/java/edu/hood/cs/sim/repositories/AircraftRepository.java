@@ -37,7 +37,7 @@ public class AircraftRepository {
 				aircraft = list.get(0);
 			}
 		} catch (Exception ex) {
-
+			
 		} finally {
 			if (session != null) {
 				session.close();

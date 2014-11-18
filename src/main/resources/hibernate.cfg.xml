@@ -32,6 +32,8 @@
         <property name="hbm2ddl.auto">validate</property>
 
         <mapping class="edu.hood.cs.sim.domain.Aircraft"/>
+        <mapping class="edu.hood.cs.sim.domain.Airport"/>
+        <mapping class="edu.hood.cs.sim.domain.ScheduledFlight"/>
 
     </session-factory>
 

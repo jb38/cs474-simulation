@@ -1,6 +1,7 @@
 package edu.hood.cs.sim.repositories;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -46,6 +47,11 @@ public class ScheduledFlightRepository {
 			}
 		}
 
+		schedule.sort(new Comparator<ScheduledFlight>() {
+			public int compare(ScheduledFlight o1, ScheduledFlight o2) {
+				return o1.compareTo(o2);
+			}
+		});
 		return schedule;
 	}
 }

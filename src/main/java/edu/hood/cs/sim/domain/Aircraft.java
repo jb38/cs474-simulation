@@ -13,7 +13,6 @@ import org.apache.log4j.Logger;
 
 import sim.engine.SimState;
 import sim.engine.Steppable;
-import sim.util.Double2D;
 import edu.hood.cs.sim.Simulation;
 import edu.hood.cs.sim.repositories.ScheduledFlightRepository;
 
@@ -85,8 +84,6 @@ public class Aircraft implements Steppable  {
 	public void init(SimState state) {
 		Simulation sim = (Simulation)state;
 		
-		log.info(this.tailNum);
-		
 		ScheduledFlightRepository repository = ScheduledFlightRepository.getInstance();
 		this.schedule = repository.getSchedule(this);
 		
@@ -113,23 +110,22 @@ public class Aircraft implements Steppable  {
 		double departureTime = currentTask.getDepartureSimTime() + this.getDelay();
 		double arrivalTime = departureTime + currentTask.getAirTime();
 		
-		log.debug("departureTime: " + departureTime + "(" + currentTask.getDepartureTime() + ")");
-		log.debug("arrivalTime: " + arrivalTime + "(" + currentTask.getArrivalTime() + ")");
-		log.debug("delay: " + this.delay);
-		
 		AircraftState currentState = this.getState();
 		
 		// TODO DELAY DELAY DELAY
+		//      may have to add a boolean flag to indicate whether an aircraft has 
+		//      already been delayed for this particular flight (currentTask)
 		
 		// should take off
 		if (this.state == AircraftState.ON_GROUND && time == departureTime) {
 			
+			log.debug(currentTask);
 			log.debug("(" + this.tailNum + ") departing");
 			
 			// update the state
 			this.setState(AircraftState.IN_AIR);
 			
-			// schedule the next step to be at landing
+			// schedule the next "step" to be at landing
 			sim.schedule.scheduleOnceIn(currentTask.getAirTime(), this);
 		}
 		
@@ -141,18 +137,30 @@ public class Aircraft implements Steppable  {
 			this.setState(AircraftState.ON_GROUND);
 			this.setDelay(0);
 			
+			// TODO clear the delayed flag
+			
 			this.schedule.remove(0);
+			if (this.schedule.size() > 0) {
+				ScheduledFlight nextTask = this.schedule.get(0);
+				sim.schedule.scheduleOnce(nextTask.getDepartureSimTime(), this);
+				
+				// TODO there exists the case where a particular aircraft
+				//      will not arrive in time for it's next flight, even
+				//      if it is scheduled -- it is destined to be late.
+				//      we should have a way to capture this (isolated from
+				//      normal lateness?)
+				//      this throws an exception currently
+			}
 		}
 		
-//		double progress = Math.min(0, (steps - departureSteps) / (double)(arrivalSteps - departureSteps)),
-//		       x = 0, 
-//		       y = 0; // TODO calculate the aircraft's current location
-//		
-//		
-//		sim.field.setObjectLocation(this, new Double2D(x, y));
+		// TODO calculate the aircraft's geographic position? doing this depends on 
+		//      how we decide to implement the visualization
 		
-		// TODO register the next event with the scheduler  (include random delay here)
-		//double time = 0; // TODO
-		//sim.schedule.scheduleOnce(time, this);
+		//		double progress = Math.min(0, (steps - departureSteps) / (double)(arrivalSteps - departureSteps)),
+		//		       x = 0, 
+		//		       y = 0; // TODO calculate the aircraft's current location
+		//		
+		//		
+		//		sim.field.setObjectLocation(this, new Double2D(x, y));
 	}
 }

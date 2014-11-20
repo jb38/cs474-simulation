@@ -8,16 +8,16 @@ import javax.persistence.Transient;
 
 @Entity
 @Table(name="SCHEDULES")
-public class ScheduledFlight {
+public class ScheduledFlight implements Comparable<ScheduledFlight> {
 
 	private int id = -1;
 	private String tailNum = null;
 	private String carrier = null;
+	private String flightNum = null;
 	private String origin = null;
 	private String destination = null;
 	private String departureTime = null;
 	private String arrivalTime = null;
-	private float airTime = 0;
 	
 	@Id
     public int getId() {
@@ -46,6 +46,15 @@ public class ScheduledFlight {
 		this.carrier = carrier;
 	}
 	
+	@Column(name="FL_NUM")
+	public String getFlightNum() {
+		return flightNum;
+	}
+
+	public void setFlightNum(String flightNum) {
+		this.flightNum = flightNum;
+	}
+
 	@Column(name="ORIGIN")
 	public String getOrigin() {
 		return origin;
@@ -64,7 +73,7 @@ public class ScheduledFlight {
 		this.destination = destination;
 	}
 	
-	@Column(name="DEP_TIME")
+	@Column(name="CRS_DEP_TIME")
 	public String getDepartureTime() {
 		return departureTime;
 	}
@@ -73,7 +82,7 @@ public class ScheduledFlight {
 		this.departureTime = departureTime;
 	}
 	
-	@Column(name="ARR_TIME")
+	@Column(name="CRS_ARR_TIME")
 	public String getArrivalTime() {
 		return arrivalTime;
 	}
@@ -82,13 +91,9 @@ public class ScheduledFlight {
 		this.arrivalTime = arrivalTime;
 	}
 	
-	@Column(name="AIR_TIME")
-	public float getAirTime() {
-		return airTime;
-	}
-
-	public void setAirTime(float airTime) {
-		this.airTime = airTime;
+	@Transient
+	public double getAirTime() {
+		return this.getArrivalSimTime() - this.getDepartureSimTime();
 	}
 
 	@Transient
@@ -108,5 +113,24 @@ public class ScheduledFlight {
 		long hours = rawSteps - minutes;
 		
 		return (hours * 60) + minutes;
+	}
+	
+	@Override
+	public String toString() {
+		return String.format("%s%s (%s) %s %s-%s %s", 
+				this.carrier, 
+				this.flightNum, 
+				this.tailNum, 
+				this.origin, 
+				this.departureTime, 
+				this.arrivalTime, 
+				this.destination);
+	}
+
+	public int compareTo(ScheduledFlight o) {
+		double lhs = this.getDepartureSimTime(),
+			   rhs = o.getDepartureSimTime();
+		
+		return Double.compare(lhs, rhs);
 	}
 }

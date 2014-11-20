@@ -13,6 +13,10 @@ import sim.display.SimpleController;
 import sim.engine.SimState;
 import sim.portrayal.continuous.ContinuousPortrayal2D;
 
+// NOTE this is a basic implementation -- it should not be considered to be ready
+//      for "prime time" (until the implementation is fixed and this comment is
+//      removed
+
 public class SimulationWithUI extends GUIState {
 
 	/** The desired FPS */

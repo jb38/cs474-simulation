@@ -65,6 +65,6 @@ http://maven.apache.org/download.cgi
 
         mvn clean package
 
-  1. To execute (NOTE: you should have flights.db saved from Google Drive to your current directory):
+  1. To execute:
 
         java -jar ./target/cs474-simulation-0.0.1-SNAPSHOT.jar

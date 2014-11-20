@@ -87,7 +87,7 @@ public class Aircraft implements Steppable  {
 		ScheduledFlightRepository repository = ScheduledFlightRepository.getInstance();
 		this.schedule = repository.getSchedule(this);
 		
-		log.debug("schedule for " + this.tailNum + " has " + this.schedule.size() + " items");
+		log.trace("schedule for " + this.tailNum + " has " + this.schedule.size() + " items");
 		
 		if (this.schedule.size() == 0) {
 			return;
@@ -104,11 +104,10 @@ public class Aircraft implements Steppable  {
 		}
 		
 		double time = sim.schedule.getTime();
-		log.debug("(" + this.tailNum + ") time " + time);
 		
 		ScheduledFlight currentTask = this.schedule.get(0);
 		double departureTime = currentTask.getDepartureSimTime() + this.getDelay();
-		double arrivalTime = departureTime + currentTask.getAirTime();
+		double arrivalTime = departureTime + currentTask.getElapsedTime();
 		
 		AircraftState currentState = this.getState();
 		
@@ -119,37 +118,44 @@ public class Aircraft implements Steppable  {
 		// should take off
 		if (this.state == AircraftState.ON_GROUND && time == departureTime) {
 			
-			log.debug(currentTask);
-			log.debug("(" + this.tailNum + ") departing");
+			log.debug(String.format("%8.1f %s departing", time, currentTask));
 			
 			// update the state
 			this.setState(AircraftState.IN_AIR);
 			
 			// schedule the next "step" to be at landing
-			sim.schedule.scheduleOnceIn(currentTask.getAirTime(), this);
+			sim.schedule.scheduleOnce(arrivalTime, this);
 		}
 		
 		// should land?
-		if (this.state == AircraftState.IN_AIR && time == arrivalTime) {
+		if (this.state == AircraftState.IN_AIR && time >= arrivalTime) {
 			
-			log.debug("(" + this.tailNum + ") arriving");
+			log.debug(String.format("%8.1f %s arriving", time, currentTask));
 			
+			// update the state
 			this.setState(AircraftState.ON_GROUND);
-			this.setDelay(0);
 			
+			// reset the delay
+			this.setDelay(0);
 			// TODO clear the delayed flag
 			
 			this.schedule.remove(0);
 			if (this.schedule.size() > 0) {
 				ScheduledFlight nextTask = this.schedule.get(0);
-				sim.schedule.scheduleOnce(nextTask.getDepartureSimTime(), this);
 				
+				if (time < nextTask.getDepartureSimTime()) {
+					sim.schedule.scheduleOnce(nextTask.getDepartureSimTime(), this);
+				} else {
+					log.debug(String.format("%8.1f %s erroneous", time, nextTask));
+				}
 				// TODO there exists the case where a particular aircraft
 				//      will not arrive in time for it's next flight, even
 				//      if it is scheduled -- it is destined to be late.
 				//      we should have a way to capture this (isolated from
 				//      normal lateness?)
 				//      this throws an exception currently
+				// TODO also, the times in the SCHEDULES table need to be normalized
+				//      normalized to GMT
 			}
 		}
 		

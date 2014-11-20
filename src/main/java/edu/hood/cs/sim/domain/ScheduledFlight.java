@@ -18,6 +18,7 @@ public class ScheduledFlight implements Comparable<ScheduledFlight> {
 	private String destination = null;
 	private String departureTime = null;
 	private String arrivalTime = null;
+	private float elapsedTime = 0;
 	
 	@Id
     public int getId() {
@@ -91,6 +92,15 @@ public class ScheduledFlight implements Comparable<ScheduledFlight> {
 		this.arrivalTime = arrivalTime;
 	}
 	
+	@Column(name="CRS_ELAPSED_TIME")
+	public float getElapsedTime() {
+		return elapsedTime;
+	}
+
+	public void setElapsedTime(float elapsedTime) {
+		this.elapsedTime = elapsedTime;
+	}
+
 	@Transient
 	public double getAirTime() {
 		return this.getArrivalSimTime() - this.getDepartureSimTime();
@@ -117,7 +127,7 @@ public class ScheduledFlight implements Comparable<ScheduledFlight> {
 	
 	@Override
 	public String toString() {
-		return String.format("%s%s (%s) %s %s-%s %s", 
+		return String.format("%2s%-4s (%6s) %3s %4s-%4s %3s", 
 				this.carrier, 
 				this.flightNum, 
 				this.tailNum, 

@@ -54,7 +54,6 @@ public class AircraftRepository {
 		try {
 			session = HibernateUtil.getSessionFactory().openStatelessSession();
 			Criteria criteria = session.createCriteria(Aircraft.class);
-			criteria.add(Restrictions.not(Restrictions.eq("tailNum", "N969DL")));
 			
 			@SuppressWarnings("unchecked")
 			List<Aircraft> list = (List<Aircraft>)criteria.list();

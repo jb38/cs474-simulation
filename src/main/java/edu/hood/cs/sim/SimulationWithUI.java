@@ -1,19 +1,14 @@
 package edu.hood.cs.sim;
 
 import java.awt.Color;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 import javax.swing.JFrame;
 
-import sim.app.asteroids.Ship;
-import sim.display.Console;
 import sim.display.Controller;
 import sim.display.Display2D;
 import sim.display.GUIState;
-import sim.display.RateAdjuster;
 import sim.display.SimpleController;
 import sim.engine.SimState;
 import sim.portrayal.continuous.ContinuousPortrayal2D;

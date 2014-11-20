@@ -17,6 +17,7 @@ public class ScheduledFlight {
 	private String destination = null;
 	private String departureTime = null;
 	private String arrivalTime = null;
+	private float airTime = 0;
 	
 	@Id
     public int getId() {
@@ -81,17 +82,26 @@ public class ScheduledFlight {
 		this.arrivalTime = arrivalTime;
 	}
 	
-	@Transient
-	public long getDepartureSimSteps() {
-		return timeToSteps(this.getDepartureTime());
+	@Column(name="AIR_TIME")
+	public float getAirTime() {
+		return airTime;
+	}
+
+	public void setAirTime(float airTime) {
+		this.airTime = airTime;
 	}
 
 	@Transient
-	public long getArrivalSimSteps() {
-		return timeToSteps(this.getArrivalTime());
+	public double getDepartureSimTime() {
+		return timeToSimTime(this.getDepartureTime());
+	}
+
+	@Transient
+	public double getArrivalSimTime() {
+		return timeToSimTime(this.getArrivalTime());
 	}
 	
-	private long timeToSteps(String timeStr) {
+	private double timeToSimTime(String timeStr) {
 		
 		long rawSteps = Long.parseLong(timeStr);
 		long minutes = rawSteps % 100;

@@ -53,7 +53,7 @@
 						<manifest>
 							<addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
-							<mainClass>edu.hood.cs.sim.SimulationWithUI</mainClass>
+							<mainClass>edu.hood.cs.sim.Simulation</mainClass>
 						</manifest>
 					</archive>
 				</configuration>

@@ -8,6 +8,9 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+
 import sim.engine.SimState;
 import sim.engine.Steppable;
 import sim.util.Double2D;
@@ -19,6 +22,8 @@ import edu.hood.cs.sim.repositories.ScheduledFlightRepository;
 @Table(name="AIRCRAFT")
 public class Aircraft implements Steppable  {
 
+	private static final Logger log = LogManager.getLogger(Aircraft.class);
+	
 	private int id = -1;
 	private String carrier = null;
 	private String tailNum = null;
@@ -77,11 +82,21 @@ public class Aircraft implements Steppable  {
 
 	private List<ScheduledFlight> schedule = null;
 	
-	public void init() {
+	public void init(SimState state) {
+		Simulation sim = (Simulation)state;
+		
+		log.info(this.tailNum);
 		
 		ScheduledFlightRepository repository = ScheduledFlightRepository.getInstance();
-		
 		this.schedule = repository.getSchedule(this);
+		
+		log.debug("schedule for " + this.tailNum + " has " + this.schedule.size() + " items");
+		
+		if (this.schedule.size() == 0) {
+			return;
+		} else {
+			sim.schedule.scheduleOnce(this.schedule.get(0).getDepartureSimTime(), this);
+		}
 	}
 	
 	public void step(SimState state) {
@@ -91,32 +106,50 @@ public class Aircraft implements Steppable  {
 			return;
 		}
 		
-		ScheduledFlight currentTask = this.schedule.get(0);
-		long departureSteps = currentTask.getDepartureSimSteps() + this.getDelay();
-		long arrivalSteps = currentTask.getArrivalSimSteps() + this.getDelay();
+		double time = sim.schedule.getTime();
+		log.debug("(" + this.tailNum + ") time " + time);
 		
-		long steps = sim.schedule.getSteps();
+		ScheduledFlight currentTask = this.schedule.get(0);
+		double departureTime = currentTask.getDepartureSimTime() + this.getDelay();
+		double arrivalTime = departureTime + currentTask.getAirTime();
+		
+		log.debug("departureTime: " + departureTime + "(" + currentTask.getDepartureTime() + ")");
+		log.debug("arrivalTime: " + arrivalTime + "(" + currentTask.getArrivalTime() + ")");
+		log.debug("delay: " + this.delay);
 		
 		AircraftState currentState = this.getState();
 		
-		if (currentState == AircraftState.ON_GROUND && steps == departureSteps - 1) {
-			double random = sim.random.nextDouble();
-			if (random < 0.25) {
-				this.setDelay(sim.random.nextLong(60));
-			}
-		} else if (currentState == AircraftState.ON_GROUND && steps == departureSteps) {
+		// TODO DELAY DELAY DELAY
+		
+		// should take off
+		if (this.state == AircraftState.ON_GROUND && time == departureTime) {
+			
+			log.debug("(" + this.tailNum + ") departing");
+			
+			// update the state
 			this.setState(AircraftState.IN_AIR);
-		} else if (currentState == AircraftState.IN_AIR && steps == arrivalSteps) {
-			this.setState(AircraftState.ON_GROUND);
-			this.setDelay(0);
+			
+			// schedule the next step to be at landing
+			sim.schedule.scheduleOnceIn(currentTask.getAirTime(), this);
 		}
 		
-		double progress = Math.min(0, (steps - departureSteps) / (double)(arrivalSteps - departureSteps)),
-		       x = 0, 
-		       y = 0; // TODO calculate the aircraft's current location
+		// should land?
+		if (this.state == AircraftState.IN_AIR && time == arrivalTime) {
+			
+			log.debug("(" + this.tailNum + ") arriving");
+			
+			this.setState(AircraftState.ON_GROUND);
+			this.setDelay(0);
+			
+			this.schedule.remove(0);
+		}
 		
-		
-		sim.field.setObjectLocation(this, new Double2D(x, y));
+//		double progress = Math.min(0, (steps - departureSteps) / (double)(arrivalSteps - departureSteps)),
+//		       x = 0, 
+//		       y = 0; // TODO calculate the aircraft's current location
+//		
+//		
+//		sim.field.setObjectLocation(this, new Double2D(x, y));
 		
 		// TODO register the next event with the scheduler  (include random delay here)
 		//double time = 0; // TODO

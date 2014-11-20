@@ -91,8 +91,8 @@ public class Simulation extends SimState {
 		AircraftRepository repository = AircraftRepository.getInstance();
 		
 		for (Aircraft aircraft : repository.fetchAll()) {
-			aircraft.init();
-			schedule.scheduleRepeating(aircraft);
+			aircraft.init(this);
+			break;
 		}
 	}
 	

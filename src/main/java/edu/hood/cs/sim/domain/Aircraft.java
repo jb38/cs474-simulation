@@ -27,8 +27,7 @@ public class Aircraft implements Steppable  {
 	private String carrier = null;
 	private String tailNum = null;
 	private AircraftState state = AircraftState.ON_GROUND;
-	private long delay = 0;
-	private boolean delayState = false;
+	private double delay = -1;
 	
 	@Id
     public int getId() {
@@ -67,22 +66,22 @@ public class Aircraft implements Steppable  {
 	}
 
 	@Transient
-	public long getDelay() {
-		return delay;
+	public double getDelay() {
+		return Math.max(0, this.delay);
 	}
 
-	public void setDelay(long delay) {
+	public void setDelay(double delay) {
 		this.delay = delay;
 	}
+
 	
 	@Transient
 	public boolean isDelayed() {
-		if (this.getDelay() > 0) {
-			delayState = true;
-		}
-		else delayState = false;
-		
-		return delayState;
+		return (this.delay > 0);
+	}
+	
+	public boolean isDelaySet() {
+		return (this.delay >= 0);
 	}
 
 	private List<ScheduledFlight> schedule = null;
@@ -142,8 +141,7 @@ public class Aircraft implements Steppable  {
 			this.setState(AircraftState.ON_GROUND);
 			
 			// reset the delay
-			this.setDelay(0);
-			this.delayState = false;
+			this.setDelay(-1);
 			// TODO clear the delayed flag
 			
 			this.schedule.remove(0);

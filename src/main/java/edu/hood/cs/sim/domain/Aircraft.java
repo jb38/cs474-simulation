@@ -28,6 +28,7 @@ public class Aircraft implements Steppable  {
 	private String tailNum = null;
 	private AircraftState state = AircraftState.ON_GROUND;
 	private long delay = 0;
+	private boolean delayState = false;
 	
 	@Id
     public int getId() {
@@ -76,7 +77,12 @@ public class Aircraft implements Steppable  {
 	
 	@Transient
 	public boolean isDelayed() {
-		return this.getDelay() > 0;
+		if (this.getDelay() > 0) {
+			delayState = true;
+		}
+		else delayState = false;
+		
+		return delayState;
 	}
 
 	private List<ScheduledFlight> schedule = null;
@@ -137,6 +143,7 @@ public class Aircraft implements Steppable  {
 			
 			// reset the delay
 			this.setDelay(0);
+			this.delayState = false;
 			// TODO clear the delayed flag
 			
 			this.schedule.remove(0);
@@ -154,8 +161,6 @@ public class Aircraft implements Steppable  {
 				//      we should have a way to capture this (isolated from
 				//      normal lateness?)
 				//      this throws an exception currently
-				// TODO also, the times in the SCHEDULES table need to be normalized
-				//      normalized to GMT
 			}
 		}
 		

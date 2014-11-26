@@ -110,7 +110,10 @@ public class Aircraft implements Steppable  {
 		double time = sim.schedule.getTime();
 		
 		if (!this.isDelaySet()) {
-			this.setDelay(sim.random.nextInt(90));
+			int delay = sim.random.nextInt(90);
+			this.setDelay(delay);
+			
+			sim.schedule.scheduleOnceIn(delay, this);
 		}
 		
 		ScheduledFlight currentTask = this.schedule.get(0);

@@ -73,7 +73,6 @@ public class Aircraft implements Steppable  {
 	public void setDelay(double delay) {
 		this.delay = delay;
 	}
-
 	
 	@Transient
 	public boolean isDelayed() {
@@ -110,15 +109,15 @@ public class Aircraft implements Steppable  {
 		
 		double time = sim.schedule.getTime();
 		
+		if (!this.isDelaySet()) {
+			this.setDelay(sim.random.nextInt(90));
+		}
+		
 		ScheduledFlight currentTask = this.schedule.get(0);
 		double departureTime = currentTask.getDepartureSimTime() + this.getDelay();
 		double arrivalTime = departureTime + currentTask.getElapsedTime();
 		
 		AircraftState currentState = this.getState();
-		
-		// TODO DELAY DELAY DELAY
-		//      may have to add a boolean flag to indicate whether an aircraft has 
-		//      already been delayed for this particular flight (currentTask)
 		
 		// should take off
 		if (currentState == AircraftState.ON_GROUND && time == departureTime) {

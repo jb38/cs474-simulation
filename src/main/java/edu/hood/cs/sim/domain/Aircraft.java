@@ -116,7 +116,7 @@ public class Aircraft implements Steppable  {
 		//      already been delayed for this particular flight (currentTask)
 		
 		// should take off
-		if (this.state == AircraftState.ON_GROUND && time == departureTime) {
+		if (currentState == AircraftState.ON_GROUND && time == departureTime) {
 			
 			log.debug(String.format("%8.1f %s departing", time, currentTask));
 			
@@ -128,7 +128,7 @@ public class Aircraft implements Steppable  {
 		}
 		
 		// should land?
-		if (this.state == AircraftState.IN_AIR && time >= arrivalTime) {
+		else if (currentState == AircraftState.IN_AIR && time >= arrivalTime) {
 			
 			log.debug(String.format("%8.1f %s arriving", time, currentTask));
 			
@@ -154,8 +154,6 @@ public class Aircraft implements Steppable  {
 				//      we should have a way to capture this (isolated from
 				//      normal lateness?)
 				//      this throws an exception currently
-				// TODO also, the times in the SCHEDULES table need to be normalized
-				//      normalized to GMT
 			}
 		}
 		

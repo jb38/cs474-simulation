@@ -114,6 +114,8 @@ public class Aircraft implements Steppable  {
 			this.setDelay(delay);
 			
 			sim.schedule.scheduleOnceIn(delay, this);
+			
+			return;
 		}
 		
 		ScheduledFlight currentTask = this.schedule.get(0);

@@ -110,10 +110,14 @@ public class Aircraft implements Steppable  {
 		double time = sim.schedule.getTime();
 		
 		if (!this.isDelaySet()) {
+			
 			int delay = sim.random.nextInt(90);
 			this.setDelay(delay);
 			
 			sim.schedule.scheduleOnceIn(delay, this);
+			
+			// TODO compute the num of impacted flights
+			
 			
 			return;
 		}
@@ -146,7 +150,6 @@ public class Aircraft implements Steppable  {
 			
 			// reset the delay
 			this.setDelay(-1);
-			// TODO clear the delayed flag
 			
 			this.schedule.remove(0);
 			if (this.schedule.size() > 0) {

@@ -28,7 +28,7 @@ public class ScheduledFlightRepositoryTest extends TestCase {
 		ScheduledFlightRepository repository = ScheduledFlightRepository.getInstance();
 		
 		Aircraft aircraft = new Aircraft();
-		aircraft.setTailNum("D942DN");
+		aircraft.setTailNum("N284JB");
 		
 		assertNotSame(0, repository.getSchedule(aircraft).size());
 	}

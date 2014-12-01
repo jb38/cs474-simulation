@@ -21,6 +21,7 @@ public class Instrumentation {
 	private static final Instrumentation instance = new Instrumentation();
 	
 	private FileWriter out = null;
+<<<<<<< HEAD
 =======
 import java.io.Writer;
 
@@ -35,6 +36,8 @@ public class Instrumentation {
 	
 	
 >>>>>>> 8d9b07c93594e6d8d2954f3444cd740f2655e683
+=======
+>>>>>>> parent of 766c983... more impl
 	
 	public static Instrumentation getInstance() {
 		return instance;
@@ -54,6 +57,9 @@ public class Instrumentation {
 	
 	public void registerDelay(double delay, int numImpactedFlights) {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> parent of 766c983... more impl
 		try {
 			String[] values = {
 				Double.toString(delay),

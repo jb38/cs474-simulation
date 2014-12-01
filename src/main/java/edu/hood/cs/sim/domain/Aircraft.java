@@ -99,6 +99,12 @@ public class Aircraft implements Steppable  {
 			sim.schedule.scheduleOnce(this.schedule.get(0).getDepartureSimTime(), this);
 		}
 	}
+<<<<<<< HEAD
+=======
+
+	public void step(SimState state) {
+		Simulation sim = (Simulation) state;
+>>>>>>> parent of 766c983... more impl
 
 	public void step(SimState state) {
 		Simulation sim = (Simulation)state;
@@ -108,6 +114,7 @@ public class Aircraft implements Steppable  {
 <<<<<<< HEAD
 		} else if (!this.isDelaySet()) {
 
+<<<<<<< HEAD
 =======
 		}
 		
@@ -115,6 +122,8 @@ public class Aircraft implements Steppable  {
 		
 		if (!this.isDelaySet()) {
 >>>>>>> 8d9b07c93594e6d8d2954f3444cd740f2655e683
+=======
+>>>>>>> parent of 766c983... more impl
 			int delay = sim.random.nextInt(90);
 			this.setDelay(delay);
 			

@@ -5,7 +5,7 @@
 
 package edu.hood.cs.sim;
 
-import edu.hood.cs.sim.domain.Aircraft; 
+import edu.hood.cs.sim.domain.Aircraft;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
@@ -18,6 +18,8 @@ public class Instrumentation {
 	private double delay = 0;
 	
 	Aircraft aircraft = new Aircraft();
+	
+	
 	
 	public static Instrumentation getInstance() {
 		return instance;
@@ -37,21 +39,7 @@ public class Instrumentation {
 	
 	public void registerDelay(double delay, int numImpactedFlights) {
 		delay = aircraft.getDelay(); 
-		// need function to calculate the number of impacted flights in Aircraft
-		//this.numImpactedFlights = getNumImpactedFlights();
-		
-		String fileName = "delays.txt"; 
-		
-		try {
-			FileWriter writer = new FileWriter(fileName);
-			writer.write(delay + " " + numImpactedFlights + "|\n");
-			
-			writer.close();
-		}
-		
-		catch(IOException e) {
-			e.printStackTrace();
-		}
+		this.numImpactedFlights = numImpactedFlights;
 	}
 	
 	

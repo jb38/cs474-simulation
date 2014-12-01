@@ -104,7 +104,7 @@ public class Aircraft implements Steppable {
 					.getDepartureSimTime(), this);
 		}
 	}
-
+	
 	public void step(SimState state) {
 		Simulation sim = (Simulation) state;
 
@@ -112,13 +112,28 @@ public class Aircraft implements Steppable {
 			return;
 		} else if (!this.isDelaySet()) {
 
-			int delay = sim.random.nextInt(90);
+			int delay = sim.random.nextInt(90) % 90;
 			this.setDelay(delay);
 
 			sim.schedule.scheduleOnceIn(delay, this);
 
-			int numImpactedFlights = 0;
-			// TODO compute the num of impacted flights
+			// the current flight is impacted only if the delay is > 0
+			int numImpactedFlights = (delay > 0 ? 1 : 0);
+			
+			// figure out how many flights in the chain are impacted
+			for (int i = 1, il = this.schedule.size(); i < il; i++) {
+				double delta = this.schedule.get(i).getDepartureSimTime() - (this.schedule.get(i - 1).getArrivalSimTime() + delay); 
+				
+				log.trace("(" + this.getTailNum() + ") delta " + delta);
+				
+				numImpactedFlights += (delta <= 0 ? 1 : 0);
+				
+				if (delta < 0) {
+					delay = (int)-delta;
+				} else { // the delay chain has been broken
+					break;
+				}
+			}
 
 			Instrumentation.getInstance().registerDelay(delay,
 					numImpactedFlights);

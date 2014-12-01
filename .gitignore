@@ -10,3 +10,9 @@ pom.xml.releaseBackup
 pom.xml.versionsBackup
 pom.xml.next
 release.properties
+
+src/main/java/edu/hood/cs/sim/Instrumentation_old.java
+
+src/main/java/edu/hood/cs/sim/Instrumentation.java
+
+src/main/java/edu/hood/cs/sim/Instrumentation.java

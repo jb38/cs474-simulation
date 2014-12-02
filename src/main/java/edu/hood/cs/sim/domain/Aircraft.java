@@ -135,7 +135,10 @@ public class Aircraft implements Steppable {
 				}
 			}
 
-			Instrumentation.getInstance().registerDelay(delay,
+			Instrumentation.getInstance().registerDelay(
+					this.getCarrier() + this.schedule.get(0).getFlightNum(),
+					this.getTailNum(),
+					delay,
 					numImpactedFlights);
 
 			return;

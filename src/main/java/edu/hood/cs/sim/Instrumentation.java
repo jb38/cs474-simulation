@@ -37,7 +37,11 @@ public class Instrumentation {
 	}
 	
 	private void writeHeaderRow() throws IOException {
-		String[] columns = { "DELAY", "NUM_FLIGHTS_IMPACTED" };
+		String[] columns = { 
+			"FLIGHT_NUMBER",
+			"TAIL_NUMBER",
+			"DELAY", 
+			"NUM_FLIGHTS_IMPACTED" };
 		writeRow(String.join(DELIMITER, columns));
 	}
 	
@@ -46,12 +50,14 @@ public class Instrumentation {
 		out.write('\n');
 	}
 
-	public void registerDelay(double delay, int numImpactedFlights) {
+	public void registerDelay(String flightNumber, String tailNumber, double delay, int numImpactedFlights) {
 		
 		log.info(String.format("Delay: %.0f Impacted: %d", delay, numImpactedFlights));
 		
 		try {
 			String[] values = {
+				flightNumber,
+				tailNumber,
 				Double.toString(delay),
 				Integer.toString(numImpactedFlights, 10)
 			};

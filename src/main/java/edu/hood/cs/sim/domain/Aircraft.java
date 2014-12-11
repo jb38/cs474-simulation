@@ -112,7 +112,7 @@ public class Aircraft implements Steppable {
 			return;
 		} else if (!this.isDelaySet()) {
 
-			int delay = sim.random.nextInt(90) % 90;
+			int delay = sim.random.nextInt(90);
 			this.setDelay(delay);
 
 			sim.schedule.scheduleOnceIn(delay, this);
@@ -138,7 +138,7 @@ public class Aircraft implements Steppable {
 			Instrumentation.getInstance().registerDelay(
 					this.getCarrier() + this.schedule.get(0).getFlightNum(),
 					this.getTailNum(),
-					delay,
+					this.getDelay(),
 					numImpactedFlights);
 
 			return;

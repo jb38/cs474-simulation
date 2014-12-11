@@ -34,6 +34,7 @@
         <mapping class="edu.hood.cs.sim.domain.Aircraft"/>
         <mapping class="edu.hood.cs.sim.domain.Airport"/>
         <mapping class="edu.hood.cs.sim.domain.ScheduledFlight"/>
+        <mapping class="edu.hood.cs.sim.domain.Metric"/>
 
     </session-factory>
 
